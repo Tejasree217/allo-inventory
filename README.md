@@ -24,7 +24,7 @@ A full-stack inventory reservation management system built using Next.js, Prisma
 
 ## Live Demo
 
-https://allo-inventory-9teq.vercel.app
+https://allo-inventory-9teg.vercel.app
 
 ## GitHub Repository
 
