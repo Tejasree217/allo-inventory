@@ -16,12 +16,14 @@ enum ReservationStatus {
 model Product {
   id           Int          @id @default(autoincrement())
   name         String
+
   inventories  Inventory[]
 }
 
 model Warehouse {
   id           Int          @id @default(autoincrement())
   name         String
+
   inventories  Inventory[]
 }
 
@@ -35,6 +37,7 @@ model Inventory {
   reservedStock    Int            @default(0)
 
   product          Product        @relation(fields: [productId], references: [id])
+
   warehouse        Warehouse      @relation(fields: [warehouseId], references: [id])
 
   reservations     Reservation[]
@@ -44,11 +47,18 @@ model Reservation {
   id            Int                  @id @default(autoincrement())
 
   inventoryId   Int
+
   quantity      Int
 
-  status        ReservationStatus
+  status        ReservationStatus    @default(PENDING)
 
   expiresAt     DateTime
+
+  createdAt     DateTime             @default(now())
+
+  confirmedAt   DateTime?
+
+  releasedAt    DateTime?
 
   inventory     Inventory            @relation(fields: [inventoryId], references: [id])
 }

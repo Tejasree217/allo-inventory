@@ -28,19 +28,36 @@ export async function POST(req: Request) {
       );
     }
 
-    const updatedInventory =
-      await prisma.inventory.update({
-        where: {
-          id: body.inventoryId,
-        },
+    // Update reserved stock
+    await prisma.inventory.update({
+      where: {
+        id: body.inventoryId,
+      },
 
+      data: {
+        reservedStock: {
+          increment: body.quantity,
+        },
+      },
+    });
+
+    // Create reservation record
+    const reservation =
+      await prisma.reservation.create({
         data: {
-          reservedStock:
-            inventory.reservedStock + body.quantity,
+          inventoryId: body.inventoryId,
+
+          quantity: body.quantity,
+
+          status: "PENDING",
+
+          expiresAt: new Date(
+            Date.now() + 15 * 60 * 1000
+          ),
         },
       });
 
-    return NextResponse.json(updatedInventory);
+    return NextResponse.json(reservation);
   } catch (error) {
     console.log(error);
 
